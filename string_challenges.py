@@ -25,4 +25,4 @@ print(*([w[0] for w in sentence.split()]), sep='\n')
 
 # Вывести усреднённую длину слова в предложении
 sentence = 'Мы приехали в гости'
-print(int(sum([len(w) for w in sentence.split()]) / 4))
+print(int(sum([len(w) for w in sentence.split()]) / len(sentence.split())))
