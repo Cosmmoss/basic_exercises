@@ -2,7 +2,7 @@
 # Необходимо вывести имена всех учеников из списка с новой строки
 
 names = ['Оля', 'Петя', 'Вася', 'Маша']
-print(*[name for name in names], sep='\n')
+print(*names, sep='\n')
 
 
 # Задание 2
@@ -12,7 +12,8 @@ print(*[name for name in names], sep='\n')
 # Петя: 4
 
 names = ['Оля', 'Петя', 'Вася', 'Маша']
-print(*[f'{name}: {len(name)}' for name in names], sep='\n')
+for name in names:
+    print(f'{name}: {len(name)}')
 
 
 # Задание 3
@@ -25,7 +26,8 @@ is_male = {
     'Маша': False,
 }
 names = ['Оля', 'Петя', 'Вася', 'Маша']
-print(*[f"{name}; пол: {['женский', 'мужской'][is_male[name]]}" for name in names], sep='\n')
+for name in names:
+    print(f"{name}; пол: {['женский', 'мужской'][is_male[name]]}")
 
 
 # Задание 4
