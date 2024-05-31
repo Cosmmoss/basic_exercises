@@ -65,6 +65,23 @@ def generate_chat_history():
         })
     return messages
 
+def user_wrote_most_messages():
+    user_id_message = {}  # создаётся словарь с парой - 'user_id': кол-во сообщений
+    for user_id in generate_chat_history():
+        user_id_message[user_id['sent_by']] = user_id_message.get(user_id['sent_by'], 0) + 1
+
+    max_num_messages = []
+    for num in user_id_message.values():
+        max_num_messages.append(num)
+    max_num_messages = max(max_num_messages)  # определил число - максимальное количество сообщений
+
+    user_id_max = ''
+    for user_id_, num in user_id_message.items():  # перебираю ключ и значение словаря max_num_messages
+        if num == max_num_messages:
+            user_id_max += str(user_id_)  # определил айди пользователя, который написал больше всех сообщений
+
+    return f'Айди пользователя(ей), который(е) написал(и) больше всех сообщений: {user_id_max}'
 
 if __name__ == "__main__":
-    print(generate_chat_history())
+    generate_chat_history()
+    print(user_wrote_most_messages())

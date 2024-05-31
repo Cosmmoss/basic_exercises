@@ -38,14 +38,16 @@ for name in students:  # перебираем элементы (словари) 
 max_num = []
 for num in name_number.values():
     max_num.append(num)
+max_num = max(max_num)  # определил количество повторений самого частого имени
 
 max_name = ''
-for name, num in name_number.items():
-    if num == max(max_num):
-        max_name = name
+for name, num in name_number.items():  # перебираю ключ и значение словаря name_number
+    if num == max_num:
+        max_name = name  # определил самое частое имя
 
 print('Самое частое имя среди учеников:', max_name)
 print()
+
 # Задание 3
 # Есть список учеников в нескольких классах, нужно вывести самое частое имя в каждом классе.
 # Пример вывода:
@@ -77,18 +79,19 @@ def max_num_name(school_class):  # функция выдает самое час
     max_num = []
     for num in name_number.values(): 
         max_num.append(num)  # находим значение - число повторений самого частого имени
+    max_num = max(max_num)  # определил самое частое имя
 
     max_name = ''
     for name, num in name_number.items():
-        if num == max(max_num):
+        if num == max_num:
             max_name = name  # находим самое частое имя в классе
 
     return max_name
 
 for num in range(len(school_students)):
     print(f'Самое частое имя в классе {num + 1}: {max_num_name(school_students[num])}')  # вызов функции для определения самого частого имени в классе
-
 print()
+
 # Задание 4
 # Для каждого класса нужно вывести количество девочек и мальчиков в нём.
 # Пример вывода:
@@ -107,16 +110,16 @@ is_male = {
     'Миша': True,
     'Даша': False,
 }
-for clss in school:  # перебираем элементы списка shcool
+for class_ in school:  # перебираем элементы списка shcool
     girls, boys= 0, 0
-    for name in clss['students']:  # перебираем элементы списка students
+    for name in class_['students']:  # перебираем элементы списка students
         if is_male[name['first_name']]:  # если имя в словаре is_male соответствует True
             girls += 0
             boys += 1
         else:
             girls += 1
             boys += 0
-    print(f"Класс {clss['class']}: девочки {girls}, мальчики {boys}")
+    print(f"Класс {class_['class']}: девочки {girls}, мальчики {boys}")
 print()
 # Задание 5
 # По информации о учениках разных классов нужно найти класс, в котором больше всего девочек и больше всего мальчиков
