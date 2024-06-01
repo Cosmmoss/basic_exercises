@@ -87,14 +87,13 @@ def user_messages_most_answered(history):
     message_db = {}
     for message in history:  # создаём словарь ключ (id message): значение (весь message)
         message_db[message['id']] = message
-
     users_counter = {}
     for message in message_db.values():  # перебираем значения, созданного выше словаря message_db
         if message['reply_for'] is not None:  # если ответ на сообщение пользователя не None
-            parent_message = message_db[message['reply_for']]  # в переменную parent_message передаётся весь message
+            parent_message = message  # в переменную parent_message передаётся весь message
             user_id = parent_message['sent_by']  # в переменную user_id передаётся ID пользователя
             users_counter[user_id] = users_counter.get(user_id, 0) + 1  # создаётся словарь ключ (ID пользователя): значение (количество сообщений, направленных ему)
-
+    
     user_id_max = max(users_counter.items(), key=lambda items: items[1])  # определяется кортеж (ID пользователя, максимальное количество сообщений)
     
     users_id_max = [] 
