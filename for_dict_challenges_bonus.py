@@ -65,23 +65,46 @@ def generate_chat_history():
         })
     return messages
 
-def user_wrote_most_messages():
+# 1. Вывести айди пользователя, который написал больше всех сообщений.
+def user_wrote_most_messages(history):
+    
     user_id_message = {}  # создаётся словарь с парой - 'user_id': кол-во сообщений
-    for user_id in generate_chat_history():
+    for user_id in history:
         user_id_message[user_id['sent_by']] = user_id_message.get(user_id['sent_by'], 0) + 1
 
-    max_num_messages = []
-    for num in user_id_message.values():
-        max_num_messages.append(num)
-    max_num_messages = max(max_num_messages)  # определил число - максимальное количество сообщений
+    user_id_max = max(user_id_message.items(), key=lambda items: items[1])  # определяю максимальное количество сообщений
+    
+    users_id_max = [] 
+    for key, value in user_id_message.items():  # для определения всех айди пользователей, которые написали больше всех сообщений
+        if value >= user_id_max[1]:
+            users_id_max.append(key)
 
-    user_id_max = ''
-    for user_id_, num in user_id_message.items():  # перебираю ключ и значение словаря max_num_messages
-        if num == max_num_messages:
-            user_id_max += str(user_id_)  # определил айди пользователя, который написал больше всех сообщений
+    return f'ID пользователя(ей), который(е) написал(и) больше всех сообщений: {users_id_max}'
 
-    return f'Айди пользователя(ей), который(е) написал(и) больше всех сообщений: {user_id_max}'
+# 2. Вывести айди пользователя, на сообщения которого больше всего отвечали.
+def user_messages_most_answered(history):
+
+    message_db = {}
+    for message in history:  # создаём словарь ключ (id message): значение (весь message)
+        message_db[message['id']] = message
+
+    users_counter = {}
+    for message in message_db.values():  # перебираем значения, созданного выше словаря message_db
+        if message['reply_for'] is not None:  # если ответ на сообщение пользователя не None
+            parent_message = message_db[message['reply_for']]  # в переменную parent_message передаётся весь message
+            user_id = parent_message['sent_by']  # в переменную user_id передаётся ID пользователя
+            users_counter[user_id] = users_counter.get(user_id, 0) + 1  # создаётся словарь ключ (ID пользователя): значение (количество сообщений, направленных ему)
+
+    user_id_max = max(users_counter.items(), key=lambda items: items[1])  # определяется кортеж (ID пользователя, максимальное количество сообщений)
+    
+    users_id_max = [] 
+    for key, value in users_counter.items():  # для определения всех айди пользователей (в случае повторений максимального количества сообщений), на сообщения которого больше всего отвечали
+        if value == user_id_max[1]:
+            users_id_max.append(key)
+
+    return f'ID пользователя(ей), на сообщения которого(ых) больше всего отвечали: {users_id_max}'
 
 if __name__ == "__main__":
-    generate_chat_history()
-    print(user_wrote_most_messages())
+    history = generate_chat_history()
+    print(user_wrote_most_messages(history))
+    print(user_messages_most_answered(history))

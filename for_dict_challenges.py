@@ -114,11 +114,9 @@ for class_ in school:  # перебираем элементы списка shco
     girls, boys= 0, 0
     for name in class_['students']:  # перебираем элементы списка students
         if is_male[name['first_name']]:  # если имя в словаре is_male соответствует True
-            girls += 0
             boys += 1
         else:
             girls += 1
-            boys += 0
     print(f"Класс {class_['class']}: девочки {girls}, мальчики {boys}")
 print()
 # Задание 5
@@ -144,11 +142,9 @@ for klass in school:
     boys, girls = 0, 0
     for names in klass['students']:
         if is_male[names['first_name']]:  # если имя в словаре is_male соответствует True
-            girls += 0
             boys += 1
         else:
             girls += 1
-            boys += 0
     num_boys_in_classes[boys] = klass['class']  # в словарь добавляю ключ (количество мальчиков в классе): значение (класс)
     num_girls_in_classes[girls] = klass['class']  # в словарь добавляю ключ (количество девочек в классе): значение (класс)
 
