@@ -103,7 +103,54 @@ def user_messages_most_answered(history):
 
     return f'ID пользователя(ей), на сообщения которого(ых) больше всего отвечали: {users_id_max}'
 
+# 3. Вывести айди пользователей, сообщения которых видело больше всего уникальных пользователей.
+def id_users_posts_seen_most_uniq_users(history):
+    messages_db = {}
+    for message in history:
+        messages_db[message['id']] = message
+    
+    id_user_uniq_users = {}  # создаём словарь ключ (id_messege): значение (количество уникальных пользователей)
+    for mess in messages_db.values():
+        id_user_uniq_users[mess['id']] = mess['seen_by'] = len(mess['seen_by']) # замена значения по ключу seen_by в словаре messages_db
+    
+    num_max_uniq_user = max(id_user_uniq_users.items(), key=lambda items: items[1])  # определяется кортеж (id_messege, максимальное количество уникальных пользователей)
+
+    # users_id_max = {}  можно создать словарь и подсчитать максимальное количество уникальных просмотров с учётом повторяющихся id_user
+    users_id_max = set()  # создаём множество, чтобы не дублировались одинаковые id_user
+    for message in messages_db.values():
+        if message['seen_by'] == num_max_uniq_user[1]:
+            # users_id_max[message['sent_by']] = users_id_max.get(message['sent_by'], 0) + 1
+            users_id_max.add(message['sent_by'])
+      
+    return f'ID пользователей, сообщения которых видело больше всего уникальных пользователей: {users_id_max}'
+
+# 4. Определить, когда в чате больше всего сообщений: утром (до 12 часов), днём (12-18 часов) или вечером (после 18 часов).
+
+def time_most_messages_in_chat(history):
+    # Период времени с 00:00:00 по 05:59:59 не учитывается в соответствии с заданием
+
+    num_all_messages = {                  # словарь - ключ (период времени): значение (id сообщений за это время). 
+            'утром (до 12 часов)': [],
+            'днём (12-18 часов)': [],
+            'вечером (после 18 часов)': []
+            }
+
+    for message in history:
+        if '06:00:00' <= message['sent_at'].strftime('%H:%M:%S') <= '12:00:00':  # если время сообщения больше заданного
+            num_all_messages['утром (до 12 часов)'].append(message['id'])  # добавить в список словаря num_all_message
+        elif '12:00:01' <= message['sent_at'].strftime('%H:%M:%S') <= '18:00:00':
+            num_all_messages['днём (12-18 часов)'].append(message['id'])
+        elif '18:00:01' <= message['sent_at'].strftime('%H:%M:%S') <= '23:59:59':
+            num_all_messages['вечером (после 18 часов)'].append(message['id'])
+
+    time_max_messages = (max(num_all_messages.items(), key=lambda items: len(items[1])))  # определяем в какой период времени больше всего сообщений
+
+    return f"В чате больше всего сообщений: {time_max_messages[0]}"
+
+
 if __name__ == "__main__":
     history = generate_chat_history()
     print(user_wrote_most_messages(history))
     print(user_messages_most_answered(history))
+    print(id_users_posts_seen_most_uniq_users(history))
+    print(time_most_messages_in_chat(history))
