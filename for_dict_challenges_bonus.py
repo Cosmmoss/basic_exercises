@@ -142,9 +142,39 @@ def time_most_messages_in_chat(history):
 
     return f"В чате больше всего сообщений: {time_max_messages[0]}"
 
+# 5. Вывести идентификаторы сообщений, который стали началом для самых длинных тредов (цепочек ответов).
+
+def get_threads_length(history):
+    messages_db = {}
+    for message in history:
+        messages_db[message.get('id')] = message
+
+    count = {}  # ключ (№ id сообщения): значение (длина цепочки)
+
+    def get_thread_length(message_id):
+        if message_id is None:
+            return 0
+        message = messages_db[message_id]
+        parent_id = message['reply_for']
+        thread_len = get_thread_length(parent_id) + 1
+        return thread_len
+
+    for message in history:
+        count[message['id']] = get_thread_length(message['id'])
+
+    max_thread_length = max(count.items(), key=lambda items: items[1])
+
+    all_max_thread_length = []  # id сообщений, которые стали началом для самых длинных цепочек ответов
+    for id, length in count.items():
+        if length == max_thread_length[1]:  
+            all_max_thread_length.append(id)  # в список добавить ID сообщения
+
+    return f"Идентификаторы сообщений, которые стали началом для самых длинных тредов (цепочек ответов): {all_max_thread_length}" 
+
 if __name__ == "__main__":
     history = generate_chat_history()
     print(user_wrote_most_messages(history))
     print(user_messages_most_answered(history))
     print(id_users_posts_seen_most_uniq_users(history))
     print(time_most_messages_in_chat(history))
+    print(get_threads_length(history))
